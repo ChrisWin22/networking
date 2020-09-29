@@ -1,10 +1,7 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class TimeClient {
 
