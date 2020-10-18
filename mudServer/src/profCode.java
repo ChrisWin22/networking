@@ -18,10 +18,10 @@ public class profCode implements Runnable{
     static final int IAC  = 255;
 
     byte[] buf = new byte[4096];
-    int i_, n_;
+    int i_, numberOfReturnedBytes;
     int getc() throws IOException {
-        if (i_ == n_) {
-            if ((n_ = in.read(buf)) == -1)     // end of input
+        if (i_ == numberOfReturnedBytes) {
+            if ((numberOfReturnedBytes = in.read(buf)) == -1)     // end of input
                 throw new IOException();
             i_ = 0;
         }
