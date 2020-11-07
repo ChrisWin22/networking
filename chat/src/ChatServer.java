@@ -29,11 +29,14 @@ public class ChatServer{
                     }
                         //Read bytes from client
                     byte[] bytesFromClient = inputStream.readNBytes(inputStream.available());
+                    System.out.println("Received new message from: " + this.socket.getInetAddress() + ":" + this.socket.getPort());
 
                     //add bytes to message queues
                     for(MessageSender thread : threads) {
-                        if(this.socket != thread.socket)
+                        if(this.socket != thread.socket) {
                             thread.messageQueue.add(bytesFromClient);
+                            System.out.println("Added message to " + thread.socket.getInetAddress() + ":" + thread.socket.getPort() + " queue");
+                        }
                     }
                 }
             }
@@ -60,12 +63,14 @@ public class ChatServer{
             try {
                 OutputStream outputStream = socket.getOutputStream();
                 while (true) {
-                    while (messageQueue.peek() != null) {
+                        while (messageQueue.isEmpty()) {
+                            Thread.sleep(10);
+                        }
+                        System.out.println("Sent message to " + this.socket.getInetAddress() + ":" + this.socket.getPort());
                         outputStream.write(messageQueue.remove());
                         outputStream.flush();
-                    }
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -98,6 +103,7 @@ public class ChatServer{
 
         while (true){
             Socket newClientConnection = serverSocket.accept();
+            System.out.println("Incoming connection...");
 //            Thread receiver = new Thread(new messageReciever(newClientConnection));
 //            Thread sender = new Thread(new messageSender(newClientConnection));
             MessageSender sender = new MessageSender(newClientConnection);
@@ -106,6 +112,7 @@ public class ChatServer{
             receiver.start();
             sender.start();
             threads.add(sender);
+            System.out.println("Connected to " + newClientConnection.getInetAddress() + ":" + newClientConnection.getPort());
         }
     }
 }
