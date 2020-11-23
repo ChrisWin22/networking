@@ -82,6 +82,9 @@ public class TranslateClient {
         System.out.println("1. English");
         System.out.println("2. Spanish");
         System.out.println("3. French");
+        System.out.println("4. German");
+        System.out.println("5. Chinese");
+        System.out.println("6. Greek");
     }
 
     public static int choseLanguage(){
@@ -89,12 +92,10 @@ public class TranslateClient {
         System.out.print("Choose your language: ");
         Scanner scanner = new Scanner(System.in);
         int selected = scanner.nextInt();
-        switch (selected){
-            case 1: return 0;
-            case 2: return 1;
-            case 3: return 2;
-            default: return 0;
+        if(selected <= 6){
+            return selected - 1;
         }
+        return 0;
     }
 
     public static String intToLanguage(int i){
@@ -102,6 +103,9 @@ public class TranslateClient {
             case 0: return "EN";
             case 1: return "ES";
             case 2: return "FR";
+            case 3: return "DE";
+            case 4: return "ZH";
+            case 5: return "EL";
             default: return "EN";
         }
     }

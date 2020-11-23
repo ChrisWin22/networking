@@ -35,6 +35,9 @@ public class TranslateServer {
         ENGLISH,
         SPANISH,
         FRENCH,
+        GERMAN,
+        CHINESE,
+        GREEK,
     }
 
     public static int langToInt(Language lang){
@@ -42,6 +45,9 @@ public class TranslateServer {
             case ENGLISH: return 0;
             case SPANISH: return 1;
             case FRENCH: return 2;
+            case GERMAN: return 3;
+            case CHINESE: return 4;
+            case GREEK: return 5;
             default: return 0;
         }
     }
@@ -209,6 +215,9 @@ public class TranslateServer {
             case ENGLISH: return "en";
             case SPANISH: return "es";
             case FRENCH: return "fr";
+            case GERMAN: return "de";
+            case CHINESE: return "zh-TW";
+            case GREEK: return "el";
             default: return "en";
         }
     }
