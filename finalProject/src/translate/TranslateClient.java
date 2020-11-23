@@ -18,9 +18,9 @@ public class TranslateClient {
 
         @Override
         public void run(){
+            DataInputStream dataInputStream = new DataInputStream(inputStream);
             while(true){
                 try {
-                    DataInputStream dataInputStream = new DataInputStream(inputStream);
                     while (dataInputStream.available() == 0){
                         Thread.sleep(10);
                     }

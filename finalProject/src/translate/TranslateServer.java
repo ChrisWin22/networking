@@ -46,85 +46,6 @@ public class TranslateServer {
         }
     }
 
-//    public class MyCustomConnection{
-//        Socket socket;
-//        Language lang;
-//        String username;
-//        Sender sender;
-//        Receiver receiver;
-//        InputStream inputStream;
-//        OutputStream outputStream;
-//
-//        public MyCustomConnection(Socket so) throws IOException {
-//            socket = so;
-//            sender = new Sender();
-//            receiver = new Receiver();
-//            inputStream = socket.getInputStream();
-//            outputStream = socket.getOutputStream();
-//            int lan = inputStream.read();
-//            lang = Language.values()[lan];
-//            username = "Testing" + usernameValue;
-//            usernameValue++;
-//
-//
-//            sender.start();
-//            receiver.start();
-//
-//        }
-//
-//        public class Sender extends Thread{
-//            Queue<byte[]> toSend;
-//
-//            public Sender(){
-//                toSend = new LinkedList<>();
-//            }
-//
-//            @Override
-//            public void run(){
-//                while(true) {
-//                    try {
-//                        while (toSend.isEmpty()) {
-//                            Thread.sleep(10);
-//                        }
-//                        outputStream.write(toSend.remove());
-//                        outputStream.flush();
-//                    }
-//                    catch (InterruptedException | IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//        public class Receiver extends Thread{
-//            public Receiver(){}
-//
-//            @Override
-//            public void run(){
-//                while(true){
-//                    try {
-//                        while(inputStream.available() == 0){
-//                            Thread.sleep(10);
-//                        }
-//                        byte[] data = inputStream.readNBytes(inputStream.available());
-//                        System.out.println("Received message");
-//                        messages.add(new Message(username, lang, data));
-//                    }
-//                    catch (InterruptedException | IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//        public String getUsername(){
-//            return username;
-//        }
-//
-//    }
-
     static class Sender extends Thread{
         Queue<byte[]> toSend;
         Socket socket;
@@ -144,7 +65,9 @@ public class TranslateServer {
                     while (toSend.isEmpty()) {
                         Thread.sleep(10);
                     }
-                    outputStream.write(toSend.remove());
+                    byte[] sendingMessage = toSend.remove();
+                    System.out.println("sent to " + this.receiver.username + ", contains: " + sendingMessage.length);
+                    outputStream.write(sendingMessage);
                     outputStream.flush();
                 }
                 catch (InterruptedException | IOException e) {
@@ -203,13 +126,12 @@ public class TranslateServer {
                     while (messages.isEmpty()) {
                         Thread.sleep(10);
                     }
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
                     Message message = messages.remove();
-
 
                     for(Sender c : connections){
                         if(c.receiver.username.compareTo(message.username) != 0){
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
                             byte[] usernameBytes = message.username.getBytes();
                             dataOutputStream.writeInt(usernameBytes.length);
                             dataOutputStream.write(usernameBytes);
@@ -225,6 +147,7 @@ public class TranslateServer {
                             byte[] sendingMessage = byteArrayOutputStream.toByteArray();
 
                             c.toSend.add(sendingMessage);
+                            System.out.println("Added to " + c.receiver.username);
                         }
                     }
                 }
@@ -252,6 +175,7 @@ public class TranslateServer {
         int endIndex = body.indexOf(endText) - 3;
         String toReturn = body.substring(beginIndex, endIndex);
         return toReturn;
+//        return text.replace("\n", "");
     }
 
     public static void main(String[] args) throws IOException {
