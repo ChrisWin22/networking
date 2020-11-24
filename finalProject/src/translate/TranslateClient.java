@@ -40,8 +40,16 @@ public class TranslateClient {
     }
 
     public static void main(String[] args) throws IOException {
+
+        String host;
+
+        if(args.length != 0){
+            host = args[0];
+        }
+        else
+            host = "127.0.0.1";
+
         int port = 1024;
-        String host = "127.0.0.1";
 
         int chosenLanguage = choseLanguage();
         String username = choseUsername();
