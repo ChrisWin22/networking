@@ -1,5 +1,3 @@
-package translate;
-
 import com.sun.java.accessibility.util.Translator;
 
 import java.io.*;
@@ -185,13 +183,18 @@ public class TranslateServer {
     }
 
     public static void main(String[] args) throws IOException {
+
         int port = 1024;
+
+        System.out.println("Starting server...");
 
         ServerSocket serverSocket = new ServerSocket(port);
         messages = new LinkedList<>();
         connections = new ArrayList<>();
         usernameValue = 1;
         new queueAndTranslate().start();
+
+        System.out.println("Server started");
 
 
         while(true){
